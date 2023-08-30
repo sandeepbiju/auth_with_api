@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class CompanyController extends Controller
@@ -15,7 +17,8 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        return view('companies.index');
+        $companies = Company::paginate(10);
+        return view('companies.index', compact('companies'));
     }
 
     /**
@@ -23,7 +26,7 @@ class CompanyController extends Controller
      */
     public function create()
     {
-        //
+        return view('companies.create');
     }
 
     /**
@@ -31,7 +34,29 @@ class CompanyController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Validate and store the company data
+        $data = $request->validate([
+            'name' => 'required|max:255',
+            'email' => 'nullable|email|unique:companies,email',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Assuming logo is an image file
+            'website' => 'nullable|url',
+        ]);
+        $company = new Company();
+        $company->name = $request->name;
+        $company->email = $request->email;
+        if ($request->hasFile('logo')) {
+            $logo = $request->file('logo');
+            $logoName = time() . '.' . $logo->getClientOriginalExtension();
+            $logo->storeAs('public', $logoName);
+            // You can also store the image path in the database if needed
+            // $imagePath = 'storage/' . $imageName;
+            $company->logo = $logo;
+        }
+        $company->website = $request->website;
+        $company->save();
+
+        return redirect()->route('companies.index')
+            ->with('success', 'Company created successfully');
     }
 
     /**
@@ -45,24 +70,51 @@ class CompanyController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Company $company)
     {
-        //
+        return view('companies.edit', compact('company'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Company $company)
     {
-        //
+        $request->validate([
+            'name' => 'required|max:255',
+            'email' => 'nullable|email|unique:companies,email,' . $company->id,
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Assuming logo is an image file
+            'website' => 'nullable|url',
+        ]);
+
+
+        $company = Company::find($company->id);
+        $company->name = $request->name;
+        $company->email = $request->email;
+        if ($request->hasFile('logo')) {
+            $logo = $request->file('logo');
+            $logoName = time() . '.' . $logo->getClientOriginalExtension();
+            $logo->storeAs('public', $logoName);
+            // You can also store the image path in the database if needed
+            // $imagePath = 'storage/' . $imageName;
+            $company->logo = $logo;
+        }
+        $company->website = $request->website;
+        $company->save();
+
+        return redirect()->route('companies.index')
+            ->with('success', 'Company updated successfully');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Company $company)
     {
-        //
+        // Delete the company
+        $company->delete();
+
+        return redirect()->route('companies.index')
+            ->with('success', 'Company deleted successfully');
     }
 }

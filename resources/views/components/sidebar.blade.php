@@ -4,7 +4,7 @@
         <div class="sidebar">
             <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                 <div class="image">
-                    <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+                    <img src="{{ asset('dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
                 </div>
                 <div class="info d-flex">
                     <a href="#" class="d-block">{{ auth()->user()->name }}</a>
@@ -34,8 +34,8 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ url('/company') }}"
-                            class="nav-link @if (request()->is('company*')) active @endif">
+                        <a href="{{ url('/companies') }}"
+                            class="nav-link @if (request()->is('companies*')) active @endif">
                             <i class="nav-icon fas fa-users"></i>
                             <p>
                                 Companies
@@ -43,8 +43,8 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ url('/employee') }}"
-                            class="nav-link @if (request()->is('employee*')) active @endif">
+                        <a href="{{ url('/employees') }}"
+                            class="nav-link @if (request()->is('employees*')) active @endif">
                             <i class="nav-icon fas fa-users"></i>
                             <p>
                                 Employees
