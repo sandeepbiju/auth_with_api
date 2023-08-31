@@ -18,12 +18,12 @@ class RegisterController extends BaseController
             $success['token'] =  $user->createToken('MyApp')->plainTextToken;
             $success['user_id'] =  $user->id;
             $success['name'] =  $user->name;
-            $profile_details = Employee::where('user_id', auth()->user()->id)->select('id as employee_id', 'first_name', 'last_name', 'phone')->first();
-            $company_details = Employee::with('company')->where('user_id', $user->id)->first();
+            // $profile_details = Employee::where('user_id', auth()->user()->id)->select('id as employee_id', 'first_name', 'last_name', 'phone')->first();
+            // $company_details = Employee::with('company')->where('user_id', $user->id)->first();
 
-            $success['profile_details'] = $profile_details;
-            $success['company_details'] = $company_details->company;
-            $success['company_details']['logo'] = $company_details->company['logo'] ? asset('storage/' . $company_details->company['logo']) : '';
+            // $success['profile_details'] = $profile_details;
+            // $success['company_details'] = $company_details->company;
+            // $success['company_details']['logo'] = $company_details->company['logo'] ? asset('storage/' . $company_details->company['logo']) : '';
 
             return $this->sendResponse($success, 'User login successfully.');
         } else {

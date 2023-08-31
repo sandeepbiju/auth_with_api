@@ -22,5 +22,5 @@ Route::controller(RegisterController::class)->group(function () {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/profile', [HomeController::class, 'profile_details']);
-    Route::get('/company-details', [HomeController::class, 'company_details']);
+    Route::get('/employees', [HomeController::class, 'employees']);
 });
