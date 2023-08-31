@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\EmployeeStoreRequest;
+use App\Http\Requests\EmployeeUpdateRequest;
 use App\Models\Company;
 use App\Models\Employee;
 use App\Models\User;
@@ -35,17 +37,8 @@ class EmployeeController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(EmployeeStoreRequest $request)
     {
-        // Validate and store the employee data
-        $request->validate([
-            'first_name' => 'required|max:255',
-            'last_name' => 'required|max:255',
-            'company_id' => 'required|exists:companies,id',
-            'email' => 'nullable|email|unique:users,email',
-            'phone' => 'nullable',
-        ]);
-
         $user = new User();
         $user->name = $request->first_name;
         $user->email = $request->email;
@@ -84,16 +77,8 @@ class EmployeeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Employee $employee)
+    public function update(EmployeeUpdateRequest $request, Employee $employee)
     {
-        // Validate and update the employee data
-        $request->validate([
-            'first_name' => 'required|max:255',
-            'last_name' => 'required|max:255',
-            'company_id' => 'required|exists:companies,id',
-            'email' => 'nullable|email|unique:users,email,'.$employee->user_id,
-            'phone' => 'nullable',
-        ]);
 
         $user = User::find($employee->user_id);
         $user->name = $request->first_name;

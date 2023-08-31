@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CompanyStoreRequest;
+use App\Http\Requests\CompanyUpdateRequest;
 use App\Models\Company;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -32,15 +34,8 @@ class CompanyController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CompanyStoreRequest $request)
     {
-        // Validate and store the company data
-        $data = $request->validate([
-            'name' => 'required|max:255',
-            'email' => 'nullable|email|unique:companies,email',
-            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Assuming logo is an image file
-            'website' => 'nullable|url',
-        ]);
         $company = new Company();
         $company->name = $request->name;
         $company->email = $request->email;
@@ -48,8 +43,6 @@ class CompanyController extends Controller
             $logo = $request->file('logo');
             $logoName = time() . '.' . $logo->getClientOriginalExtension();
             $logo->storeAs('public', $logoName);
-            // You can also store the image path in the database if needed
-            // $imagePath = 'storage/' . $imageName;
             $company->logo = $logo;
         }
         $company->website = $request->website;
@@ -78,15 +71,8 @@ class CompanyController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Company $company)
+    public function update(CompanyUpdateRequest $request, Company $company)
     {
-        $request->validate([
-            'name' => 'required|max:255',
-            'email' => 'nullable|email|unique:companies,email,' . $company->id,
-            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Assuming logo is an image file
-            'website' => 'nullable|url',
-        ]);
-
 
         $company = Company::find($company->id);
         $company->name = $request->name;
@@ -95,8 +81,6 @@ class CompanyController extends Controller
             $logo = $request->file('logo');
             $logoName = time() . '.' . $logo->getClientOriginalExtension();
             $logo->storeAs('public', $logoName);
-            // You can also store the image path in the database if needed
-            // $imagePath = 'storage/' . $imageName;
             $company->logo = $logo;
         }
         $company->website = $request->website;
