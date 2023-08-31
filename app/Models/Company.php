@@ -18,6 +18,11 @@ class Company extends Model
         'website',
     ];
 
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
+
     // Define relationships with other models (e.g., Employee)
     public function employees()
     {

@@ -43,7 +43,7 @@ class CompanyController extends Controller
             $logo = $request->file('logo');
             $logoName = time() . '.' . $logo->getClientOriginalExtension();
             $logo->storeAs('public', $logoName);
-            $company->logo = $logo;
+            $company->logo = $logoName;
         }
         $company->website = $request->website;
         $company->save();
@@ -81,7 +81,7 @@ class CompanyController extends Controller
             $logo = $request->file('logo');
             $logoName = time() . '.' . $logo->getClientOriginalExtension();
             $logo->storeAs('public', $logoName);
-            $company->logo = $logo;
+            $company->logo = $logoName;
         }
         $company->website = $request->website;
         $company->save();
