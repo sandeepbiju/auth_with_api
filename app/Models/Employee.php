@@ -13,10 +13,7 @@ class Employee extends Model
         'created_at',
         'updated_at',
     ];
-    public function user(){
-        return $this->belongsTo(User::class);
-    }
-    public function company(){
+    public function company_details(){
         return $this->belongsTo(company::class);
     }
 }

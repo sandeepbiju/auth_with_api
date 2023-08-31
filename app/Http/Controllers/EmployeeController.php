@@ -6,9 +6,6 @@ use App\Http\Requests\EmployeeStoreRequest;
 use App\Http\Requests\EmployeeUpdateRequest;
 use App\Models\Company;
 use App\Models\Employee;
-use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 
 class EmployeeController extends Controller
 {
@@ -39,17 +36,11 @@ class EmployeeController extends Controller
      */
     public function store(EmployeeStoreRequest $request)
     {
-        $user = new User();
-        $user->name = $request->first_name;
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
-        $user->save();
-
         $employee = new Employee();
-        $employee->user_id = $user->id;
         $employee->first_name = $request->first_name;
         $employee->last_name = $request->last_name;
         $employee->company_id = $request->company_id;
+        $employee->email = $request->email;
         $employee->phone = $request->phone;
         $employee->save();
 
@@ -80,18 +71,11 @@ class EmployeeController extends Controller
     public function update(EmployeeUpdateRequest $request, Employee $employee)
     {
 
-        $user = User::find($employee->user_id);
-        $user->name = $request->first_name;
-        $user->email = $request->email;
-        if ($request->has('password')) {
-            $user->password = Hash::make($request->password);
-        }
-        $user->save();
-
         $employee = Employee::find($employee->id);
         $employee->first_name = $request->first_name;
         $employee->last_name = $request->last_name;
         $employee->company_id = $request->company_id;
+        $employee->email = $request->email;
         $employee->phone = $request->phone;
         $employee->save();
 
